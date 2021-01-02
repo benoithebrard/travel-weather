@@ -7,7 +7,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-private val contentType = "application/json".toMediaType()
+private val JSON_MEDIA_TYPE = "application/json".toMediaType()
 
 @ExperimentalSerializationApi
 fun createWeatherForecastService(
@@ -19,7 +19,7 @@ fun createWeatherForecastService(
         .client(httpClient)
         .addConverterFactory(Json {
             ignoreUnknownKeys = true
-        }.asConverterFactory(contentType))
+        }.asConverterFactory(JSON_MEDIA_TYPE))
         .build()
 
     return retrofit.create(WeatherForecastService::class.java)
