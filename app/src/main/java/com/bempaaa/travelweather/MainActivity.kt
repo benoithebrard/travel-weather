@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.bempaaa.travelweather.config.AppConfig
-import com.bempaaa.travelweather.data.model.CurrentWeatherForecast
+import com.bempaaa.travelweather.data.model.FutureWeatherForecast
 import com.bempaaa.travelweather.ui.main.SectionsPagerAdapter
 import com.bempaaa.travelweather.utils.RequestResult
+import com.bempaaa.travelweather.utils.extensions.dateString
 import com.bempaaa.travelweather.utils.extensions.requireAppConfig
+import com.bempaaa.travelweather.utils.extensions.timeString
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -37,16 +39,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launchWhenResumed {
-            val forecastFlow: Flow<RequestResult<CurrentWeatherForecast>> =
-                appConfig.forecastRepository.getCurrentWeatherFlow(
+            val forecastFlow: Flow<RequestResult<FutureWeatherForecast>> =
+                appConfig.futureForecastRepository.getWeatherForecastFlow(
                     query = "granada",
                     scope = this
                 )
 
             forecastFlow.collect { result ->
                 when (result) {
-                    is RequestResult.Success<CurrentWeatherForecast> -> {
-                        val obj: CurrentWeatherForecast = result.data
+                    is RequestResult.Success<FutureWeatherForecast> -> {
+                        val obj = result.data.forecast.dayForecasts
+                        val timeString = result.data.forecast.dayForecasts[2].dateString
+                        val tot = timeString
                     }
                     is RequestResult.Error -> {
                         val tot = result.e

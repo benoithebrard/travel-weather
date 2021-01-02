@@ -1,14 +1,19 @@
 package com.bempaaa.travelweather.config
 
 import android.content.Context
-import com.bempaaa.travelweather.data.repository.WeatherForecastRepository
+import com.bempaaa.travelweather.data.repository.CurrentWeatherForecastRepository
+import com.bempaaa.travelweather.data.repository.FutureWeatherForecastRepository
+import com.bempaaa.travelweather.data.repository.PastWeatherForecastRepository
 import com.bempaaa.travelweather.data.service.createWeatherForecastService
 import kotlinx.serialization.ExperimentalSerializationApi
 import okhttp3.OkHttpClient
 
-class AppConfig(
-    context: Context
-) {
+/*
+ * Application configuration used to access data repositories and other unique objects
+ * There can only be 1 instance of this class
+ */
+class AppConfig(context: Context) {
+
     private val httpClient: OkHttpClient = OkHttpClient.Builder().build()
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -17,11 +22,19 @@ class AppConfig(
         httpClient = httpClient
     )
 
-    val forecastRepository = WeatherForecastRepository(
+    val currentForecastRepository = CurrentWeatherForecastRepository(
+        service = forecastService
+    )
+
+    val futureForecastRepository = FutureWeatherForecastRepository(
+        service = forecastService
+    )
+
+    val pastForecastRepository = PastWeatherForecastRepository(
         service = forecastService
     )
 
     companion object {
-        private val BASE_URL = "http://api.weatherapi.com/v1/"
+        private const val BASE_URL = "http://api.weatherapi.com/v1/"
     }
 }

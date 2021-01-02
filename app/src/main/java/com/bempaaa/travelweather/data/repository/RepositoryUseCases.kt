@@ -11,7 +11,6 @@ import retrofit2.Response
  * - a one-shot request
  * - periodic data polling
  *
- * Note: data polling returns a flow that the client should collect
  */
 interface RepositoryUseCases<DataType> {
 

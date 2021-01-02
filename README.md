@@ -1,2 +1,2 @@
 # travel-weather
-Check the weather at your destination when planning your trip, or pick a random one
+Check the weather at your travel destination, before packing your suitcase

@@ -7,17 +7,11 @@ import com.bempaaa.travelweather.utils.caching.MemoryCacheUseCases.Companion.THI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-class WeatherForecastRepository(
+class CurrentWeatherForecastRepository(
     private val service: WeatherForecastService
 ) : CachedRepository<CurrentWeatherForecast>() {
 
-    suspend fun getCurrentWeather(
-        query: String
-    ): RequestResult<CurrentWeatherForecast> = performRequest(query) {
-        service.currentWeather(query)
-    }
-
-    fun getCurrentWeatherFlow(
+    fun getWeatherForecastFlow(
         query: String,
         scope: CoroutineScope
     ): Flow<RequestResult<CurrentWeatherForecast>> = scope.createFlowOf(
