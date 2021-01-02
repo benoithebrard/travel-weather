@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
-/*
+/**
  * List of APIs to access a generic repository representation
  * The repository can be accessed either using:
  * - a one-shot request

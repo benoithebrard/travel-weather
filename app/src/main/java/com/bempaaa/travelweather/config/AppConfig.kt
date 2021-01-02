@@ -8,7 +8,7 @@ import com.bempaaa.travelweather.data.service.createWeatherForecastService
 import kotlinx.serialization.ExperimentalSerializationApi
 import okhttp3.OkHttpClient
 
-/*
+/**
  * Application configuration used to access data repositories and other unique objects
  * There can only be 1 instance of this class
  */

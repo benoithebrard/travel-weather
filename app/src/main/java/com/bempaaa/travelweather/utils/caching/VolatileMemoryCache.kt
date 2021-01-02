@@ -2,7 +2,7 @@ package com.bempaaa.travelweather.utils.caching
 
 import com.bempaaa.travelweather.utils.caching.MemoryCacheUseCases.Companion.ONE_MIN
 
-/*
+/**
  * A simple implementation of MemoryCacheUseCases backed by a volatile hash map,
  * i.e. any cached value is lost when application is recreated
  */

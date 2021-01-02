@@ -1,6 +1,6 @@
 package com.bempaaa.travelweather.utils.caching
 
-/*
+/**
  * List of APIs to access a generic cache representation
  */
 interface MemoryCacheUseCases<DataType> {
