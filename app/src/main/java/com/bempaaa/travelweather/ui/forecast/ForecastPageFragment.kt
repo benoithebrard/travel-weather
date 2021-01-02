@@ -11,6 +11,7 @@ import com.bempaaa.travelweather.config.AppConfig
 import com.bempaaa.travelweather.data.model.FutureWeatherForecast
 import com.bempaaa.travelweather.utils.RequestResult
 import com.bempaaa.travelweather.utils.extensions.requireAppConfig
+import com.bempaaa.travelweather.utils.extensions.toGroupAdapter
 import kotlinx.android.synthetic.main.fragment_forecast_page.*
 import kotlinx.coroutines.flow.collect
 
@@ -33,13 +34,12 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list_forecast_days.apply {
+        forecasts_list.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = ForecastListAdapter(forecastViewModel.dayForecasts)
         }
 
-        forecastViewModel.dayForecasts.observe(this) {
-            list_forecast_days.adapter?.notifyDataSetChanged()
+        forecastViewModel.dayForecasts.observe(this) { forecasts ->
+            forecasts_list.adapter = forecasts.toGroupAdapter()
         }
 
         lifecycleScope.launchWhenResumed {
