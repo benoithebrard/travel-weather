@@ -1,17 +1,16 @@
 package com.bempaaa.travelweather.ui.forecast
 
-import android.animation.ValueAnimator
 import android.view.View
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bempaaa.travelweather.utils.adjustViewHeight
 import com.bempaaa.travelweather.utils.computeExpandedDimensions
 import com.bempaaa.travelweather.utils.createValueAnimator
 import com.bempaaa.travelweather.utils.extensions.dateString
 import com.bempaaa.travelweather.utils.extensions.fullIconUrl
-import com.bempaaa.travelweather.utils.helper.Dimensions
 import com.bempaaa.travelweather.utils.helper.DimensionsHelper.forecastDimensions
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_forecast_day.view.*
@@ -31,6 +30,11 @@ class ForecastDayViewHolder(
             itemView.max_temp.text = "${dayForecast.maxTemperature}°"
             itemView.min_temp.text = "${dayForecast.minTemperature}°"
             Glide.with(itemView).load(dayForecast.condition.fullIconUrl).into(itemView.day_image)
+
+            itemView.wind_value.text = "${dayForecast.maxWindSpeed} km/h"
+            itemView.humidity_value.text = "${dayForecast.humidity} %"
+            itemView.uv_value.text = "${dayForecast.uv}"
+            itemView.sun_value.text = "${astronomical.sunrise}, ${astronomical.sunset}"
         }
 
         computeExpandedDimensions(
@@ -41,55 +45,30 @@ class ForecastDayViewHolder(
             forecastDimensions = dimensions
 
             itemView.setOnClickListener {
-                createExpansionAnimator(
-                    shouldExpand = !viewModel.isExpanded,
-                    viewModel = viewModel,
-                    dimensions = dimensions
-                ).start()
+                val shouldExpand = !viewModel.isExpanded
+
+                fun setExpanded(isExpanded: Boolean) {
+                    itemView.expandable_day_forecast_info.isVisible = isExpanded
+                    viewModel.isExpanded = isExpanded
+                }
+
+                createValueAnimator(
+                    isForward = shouldExpand
+                ) { progress ->
+                    adjustViewHeight(
+                        parentView = itemView,
+                        dimensions = dimensions,
+                        progress = progress
+                    )
+                }.apply {
+                    if (shouldExpand) {
+                        doOnStart { setExpanded(true) }
+                    } else {
+                        doOnEnd { setExpanded(false) }
+                    }
+                    doOnCancel { setExpanded(false) }
+                }.start()
             }
         }
-    }
-
-    private fun createExpansionAnimator(
-        shouldExpand: Boolean,
-        viewModel: ForecastDayViewModel,
-        dimensions: Dimensions
-    ): ValueAnimator = createValueAnimator(
-        isForward = shouldExpand
-    ) { progress ->
-        adjustExpandedHeight(dimensions, progress)
-    }.apply {
-        if (shouldExpand) {
-            doOnStart {
-                viewModel.setExpanded(true)
-            }
-        } else {
-            doOnEnd {
-                viewModel.setExpanded(false)
-            }
-        }
-        doOnCancel {
-            viewModel.setExpanded(false)
-        }
-    }
-
-    private fun adjustExpandedHeight(
-        dimensions: Dimensions,
-        progress: Float
-    ) {
-        val originalHeight = dimensions.originalHeight
-        val expandedHeight = dimensions.expandedHeight
-        val newHeight =
-            (originalHeight + (expandedHeight - originalHeight) * progress).toInt()
-
-        itemView.layoutParams.height = newHeight
-        itemView.requestLayout()
-    }
-
-    private fun ForecastDayViewModel.setExpanded(
-        isExpanded: Boolean
-    ) {
-        itemView.expandable_day_forecast_info.isVisible = isExpanded
-        this.isExpanded = isExpanded
     }
 }

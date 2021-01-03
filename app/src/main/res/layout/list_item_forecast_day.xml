@@ -35,6 +35,7 @@
                 android:id="@+id/day_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/date_text"
                 tools:text="day title" />
@@ -44,6 +45,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/temp_barrier"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="start"
-                app:barrierMargin="-5dp"
+                app:barrierMargin="-8dp"
                 app:constraint_referenced_ids="max_temp, min_temp" />
 
             <TextView
@@ -68,36 +70,109 @@
                 android:id="@+id/min_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/max_temp"
                 tools:text="day title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/expandable_day_forecast_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/wind_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Wind speed (max)" />
+
+                <TextView
+                    android:id="@+id/wind_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    tools:text="day title" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/humidity_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Humidity" />
+
+                <TextView
+                    android:id="@+id/humidity_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    tools:text="day title" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/uv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="UV" />
+
+                <TextView
+                    android:id="@+id/uv_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    tools:text="day title" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/sun_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sunrise/sunset" />
+
+                <TextView
+                    android:id="@+id/sun_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    tools:text="day title" />
+
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
-
-    <!--  @SerialName("maxtemp_c") val maxTemperature: Double,
-        @SerialName("mintemp_c") val minTemperature: Double,
-        @SerialName("avgtemp_c") val temperature: Double,
-        @SerialName("condition") val condition: WeatherCondition,
-        @SerialName("maxwind_kph") val maxWindSpeed: Double,
-        @SerialName("totalprecip_mm") val precipitation: Double,
-        @SerialName("avghumidity") val humidity: Double,
-        @SerialName("uv") val uv: Double,
-        @SerialName("daily_chance_of_rain") val rain: Int,
-        @SerialName("daily_chance_of_snow") val snow: Int -->
