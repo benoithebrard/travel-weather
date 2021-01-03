@@ -2,6 +2,7 @@ package com.bempaaa.travelweather.ui.forecast
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -11,7 +12,6 @@ import com.bempaaa.travelweather.config.AppConfig
 import com.bempaaa.travelweather.data.model.FutureWeatherForecast
 import com.bempaaa.travelweather.utils.RequestResult
 import com.bempaaa.travelweather.utils.extensions.requireAppConfig
-import com.bempaaa.travelweather.utils.extensions.toGroupAdapter
 import kotlinx.android.synthetic.main.fragment_forecast_page.*
 import kotlinx.coroutines.flow.collect
 
@@ -35,11 +35,12 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         super.onViewCreated(view, savedInstanceState)
 
         forecasts_list.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(context)
+            adapter = ForecastDaysAdapter(forecastViewModel.dayForecastViewModels)
         }
 
-        forecastViewModel.dayForecasts.observe(this) { forecasts ->
-            forecasts_list.adapter = forecasts.toGroupAdapter()
+        forecastViewModel.dayForecastViewModels.observe(this) { viewModels ->
+            refreshUIState(viewModels)
         }
 
         lifecycleScope.launchWhenResumed {
@@ -57,6 +58,12 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
                 }
             }
         }
+    }
+
+    private fun refreshUIState(viewModels: List<ForecastDayViewModel>) {
+        loading_indicator.isVisible = viewModels.isEmpty()
+        forecasts_list.isVisible = viewModels.isNotEmpty()
+        forecasts_list.adapter?.notifyDataSetChanged()
     }
 
     companion object {

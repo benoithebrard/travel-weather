@@ -14,6 +14,7 @@ interface MemoryCacheUseCases<DataType> {
     fun clearCache()
 
     companion object {
+        const val TEN_SEC: Long = 10 * 1000
         const val THIRTY_SEC: Long = 30 * 1000
         const val ONE_MIN: Long = 60 * 1000
         const val FIVE_MIN: Long = 5 * 60 * 1000

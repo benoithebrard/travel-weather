@@ -22,7 +22,7 @@ import java.io.IOException
  *
  */
 open class CachedRepository<T>(
-    timeout: Long = ONE_MIN
+    timeout: Long = 0
 ) : RepositoryUseCases<T> {
     private val cache: VolatileMemoryCache<T> = VolatileMemoryCache(timeout)
 
