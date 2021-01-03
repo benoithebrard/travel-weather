@@ -1,4 +1,4 @@
-package com.bempaaa.travelweather.utils.caching
+package com.bempaaa.travelweather.utils.memory
 
 /**
  * List of APIs to access a generic cache representation

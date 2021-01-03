@@ -3,7 +3,7 @@ package com.bempaaa.travelweather.data.repository
 import com.bempaaa.travelweather.data.model.FutureWeatherForecast
 import com.bempaaa.travelweather.data.service.WeatherForecastService
 import com.bempaaa.travelweather.utils.RequestResult
-import com.bempaaa.travelweather.utils.caching.MemoryCacheUseCases.Companion.ONE_MIN
+import com.bempaaa.travelweather.utils.memory.MemoryCacheUseCases.Companion.ONE_MIN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 

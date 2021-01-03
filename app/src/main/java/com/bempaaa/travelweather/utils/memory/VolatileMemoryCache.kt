@@ -1,6 +1,6 @@
-package com.bempaaa.travelweather.utils.caching
+package com.bempaaa.travelweather.utils.memory
 
-import com.bempaaa.travelweather.utils.caching.MemoryCacheUseCases.Companion.THIRTY_SEC
+import com.bempaaa.travelweather.utils.memory.MemoryCacheUseCases.Companion.THIRTY_SEC
 
 /**
  * A simple implementation of MemoryCacheUseCases backed by a volatile hash map,
