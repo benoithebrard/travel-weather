@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bempaaa.travelweather.utils.computeExpandedDimensions
 import com.bempaaa.travelweather.utils.createValueAnimator
 import com.bempaaa.travelweather.utils.extensions.dateString
+import com.bempaaa.travelweather.utils.extensions.fullIconUrl
 import com.bempaaa.travelweather.utils.helper.Dimensions
 import com.bempaaa.travelweather.utils.helper.DimensionsHelper.forecastDimensions
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_forecast_day.view.*
 
 class ForecastDayViewHolder(
@@ -24,13 +26,16 @@ class ForecastDayViewHolder(
         lastViewModel = viewModel
 
         with(viewModel.forecast) {
-            itemView.day_text.text = dateString
-            itemView.weather_text.text = dayForecast.condition.text
+            itemView.date_text.text = dateString
+            itemView.day_text.text = dayForecast.condition.text
+            itemView.max_temp.text = "${dayForecast.maxTemperature}°"
+            itemView.min_temp.text = "${dayForecast.minTemperature}°"
+            Glide.with(itemView).load(dayForecast.condition.fullIconUrl).into(itemView.day_image)
         }
 
         computeExpandedDimensions(
             parentView = itemView,
-            expandableView = itemView.weather_text,
+            expandableView = itemView.expandable_day_forecast_info,
             cachedDimensions = forecastDimensions
         ) { dimensions ->
             forecastDimensions = dimensions
@@ -84,7 +89,7 @@ class ForecastDayViewHolder(
     private fun ForecastDayViewModel.setExpanded(
         isExpanded: Boolean
     ) {
-        itemView.weather_text.isVisible = isExpanded
+        itemView.expandable_day_forecast_info.isVisible = isExpanded
         this.isExpanded = isExpanded
     }
 }

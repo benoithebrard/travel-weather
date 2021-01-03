@@ -37,7 +37,9 @@ inline fun computeExpandedDimensions(
                 expandableView.isVisible = false
             }
 
-            if (originalHeight > 0 && expandedHeight > 0 && originalWidth > 0 && expandedWidth > 0) {
+            if (originalHeight > 0 && expandedHeight > 0 &&
+                originalWidth > 0 && expandedWidth > 0
+            ) {
                 onMeasured(
                     Dimensions(
                         originalHeight,
