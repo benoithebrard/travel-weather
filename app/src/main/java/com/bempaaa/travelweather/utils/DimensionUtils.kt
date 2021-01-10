@@ -18,16 +18,16 @@ inline fun computeExpandedDimensions(
     cachedDimensions: Dimensions? = null,
     crossinline onMeasured: (Dimensions) -> Unit
 ) {
-    /*if (cachedDimensions != null) {
+    if (cachedDimensions != null) {
         onMeasured(cachedDimensions)
         return
-    }*/
+    }
 
     parentView.doOnLayout { view ->
         val originalHeight = view.height
         val originalWidth = view.width
 
-        expandableView.isVisible = true
+        expandableView.visibility = View.INVISIBLE
 
         parentView.doOnNextLayout { expandedView ->
             val expandedHeight = expandedView.height

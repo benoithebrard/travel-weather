@@ -24,11 +24,11 @@ class ForecastDaysAdapter(
     ) {
         forecasts.value?.let { viewModels ->
             val viewModel = viewModels[position]
-            if (viewModel.forecast != holder.lastViewModel?.forecast) {
+            if (!holder.isSameForecast(viewModel)) {
                 holder.bind(
                     viewModel.copy(
                         forecast = viewModel.forecast,
-                        isExpanded = holder.lastViewModel?.isExpanded ?: false
+                        isExpanded = holder.boundViewModel?.isExpanded ?: false
                     )
                 )
             }

@@ -11,6 +11,8 @@ import com.bempaaa.travelweather.utils.computeExpandedDimensions
 import com.bempaaa.travelweather.utils.createValueAnimator
 import com.bempaaa.travelweather.utils.extensions.dateString
 import com.bempaaa.travelweather.utils.extensions.fullIconUrl
+import com.bempaaa.travelweather.utils.extensions.maxTempRounded
+import com.bempaaa.travelweather.utils.extensions.minTempRounded
 import com.bempaaa.travelweather.utils.helper.DimensionsHelper.forecastDimensions
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item_forecast_day.view.*
@@ -19,16 +21,16 @@ class ForecastDayViewHolder(
     forecastDayView: View
 ) : RecyclerView.ViewHolder(forecastDayView) {
 
-    var lastViewModel: ForecastDayViewModel? = null
+    var boundViewModel: ForecastDayViewModel? = null
 
     fun bind(viewModel: ForecastDayViewModel) {
-        lastViewModel = viewModel
+        boundViewModel = viewModel
 
         with(viewModel.forecast) {
             itemView.date_text.text = dateString
             itemView.day_text.text = dayForecast.condition.text
-            itemView.max_temp.text = "${dayForecast.maxTemperature}°"
-            itemView.min_temp.text = "${dayForecast.minTemperature}°"
+            itemView.max_temp.text = "${dayForecast.maxTempRounded}°"
+            itemView.min_temp.text = "${dayForecast.minTempRounded}°"
             Glide.with(itemView).load(dayForecast.condition.fullIconUrl).into(itemView.day_image)
 
             itemView.wind_value.text = "${dayForecast.maxWindSpeed} km/h"
@@ -72,3 +74,6 @@ class ForecastDayViewHolder(
         }
     }
 }
+
+internal fun ForecastDayViewHolder.isSameForecast(viewModel: ForecastDayViewModel): Boolean =
+    viewModel.forecast == boundViewModel?.forecast

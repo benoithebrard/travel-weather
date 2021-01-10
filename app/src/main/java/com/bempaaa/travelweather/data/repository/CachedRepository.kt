@@ -1,11 +1,12 @@
 package com.bempaaa.travelweather.data.repository
 
 import com.bempaaa.travelweather.utils.RequestResult
-import com.bempaaa.travelweather.utils.memory.VolatileMemoryCache
 import com.bempaaa.travelweather.utils.extensions.toNetworkResult
+import com.bempaaa.travelweather.utils.memory.VolatileMemoryCache
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.SerializationException
 import retrofit2.Response
 import java.io.IOException
 
@@ -43,6 +44,8 @@ open class CachedRepository<T>(
                 result
             }
         } catch (e: IOException) {
+            RequestResult.Error(e)
+        } catch (e: SerializationException) {
             RequestResult.Error(e)
         }
     }
