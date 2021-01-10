@@ -76,4 +76,6 @@ class ForecastDayViewHolder(
 
     fun isSame(viewModel: ForecastDayViewModel): Boolean =
         viewModel.forecast == boundViewModel?.forecast
+
+    fun isExpanded(): Boolean = boundViewModel?.isExpanded ?: false
 }

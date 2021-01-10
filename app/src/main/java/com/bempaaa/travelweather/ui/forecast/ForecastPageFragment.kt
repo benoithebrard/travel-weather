@@ -34,28 +34,22 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
             if (value != field) {
                 when (value) {
                     UiState.Loading -> {
-                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = true
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = false
                         swipe_container.isVisible = false
                     }
                     UiState.Empty -> {
-                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = false
                         empty_indicator.isVisible = true
                         error_indicator.isVisible = false
                         swipe_container.isVisible = false
                     }
                     UiState.Error -> {
-                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = false
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = true
                         swipe_container.isVisible = false
-                        retry_button.setOnClickListener {
-                            fetchFutureForecasts()
-                        }
                     }
                     UiState.Content -> {
                         swipe_container.isRefreshing = false
@@ -63,9 +57,6 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = false
                         swipe_container.isVisible = true
-                        forecasts_list.adapter?.notifyDataSetChanged()
-                    }
-                    UiState.LoadingPast -> {
                     }
                 }
                 field = value
@@ -80,22 +71,36 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipe_container.setOnRefreshListener {
-            fetchPastForecasts()
-        }
-
-        forecasts_list.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = ForecastDaysAdapter(forecastViewModel.dayForecastViewModels)
-        }
+        setupViewListeners()
+        setupRecyclerView()
 
         forecastViewModel.dayForecastViewModels.observe(this) { viewModels ->
             uiState = if (viewModels.isNotEmpty()) {
                 UiState.Content
             } else UiState.Empty
+
+            if (uiState == UiState.Content) {
+                forecasts_list.adapter?.notifyDataSetChanged()
+            }
         }
 
         fetchFutureForecasts()
+    }
+
+    private fun setupRecyclerView() {
+        forecasts_list.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = ForecastDaysAdapter(forecastViewModel.dayForecastViewModels)
+        }
+    }
+
+    private fun setupViewListeners() {
+        retry_button.setOnClickListener {
+            fetchFutureForecasts()
+        }
+        swipe_container.setOnRefreshListener {
+            fetchPastForecasts()
+        }
     }
 
     private fun fetchFutureForecasts() {
@@ -107,7 +112,11 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
             ).collect { result ->
                 when (result) {
                     is RequestResult.Success<FutureWeatherForecast> -> {
-                        forecastViewModel.setForecasts(result.data.forecast.dayForecasts)
+                        with(result.data) {
+                            forecastViewModel.setFutureForecasts(
+                                forecast.dayForecasts
+                            )
+                        }
                     }
                     is RequestResult.Error -> {
                         uiState = UiState.Error
@@ -119,7 +128,6 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
 
     @OptIn(FlowPreview::class)
     private fun fetchPastForecasts() {
-        uiState = UiState.LoadingPast
         lifecycleScope.launchWhenResumed {
             getForecastDaysFlow(
                 query = forecastLocation,
@@ -127,18 +135,18 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
             ).collect { result ->
                 when (result) {
                     is RequestResult.Success<PastWeatherForecast> -> {
-                        forecastViewModel.setForecasts(
-                            listOfNotNull(
-                                result.data.forecast.dayForecasts,
-                                forecastViewModel.forecasts.value
-                            ).flatten()
-                        )
+                        with(result.data) {
+                            forecastViewModel.setPastForecasts(
+                                forecast.dayForecasts
+                            )
+                        }
                         disableSwipeToRefresh()
                     }
                     is RequestResult.Error -> {
                         uiState = UiState.Error
                     }
                 }
+                swipe_container.isRefreshing = false
             }
         }
     }
@@ -153,8 +161,7 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         Loading,
         Error,
         Empty,
-        Content,
-        LoadingPast
+        Content
     }
 
     companion object {
