@@ -1,7 +1,6 @@
 package com.bempaaa.travelweather.ui.forecast
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -11,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bempaaa.travelweather.R
 import com.bempaaa.travelweather.config.AppConfig
 import com.bempaaa.travelweather.data.model.FutureWeatherForecast
+import com.bempaaa.travelweather.data.model.PastWeatherForecast
+import com.bempaaa.travelweather.data.repository.getForecastDaysFlow
 import com.bempaaa.travelweather.utils.RequestResult
 import com.bempaaa.travelweather.utils.extensions.requireAppConfig
 import kotlinx.android.synthetic.main.fragment_forecast_page.*
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 
 class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
@@ -32,18 +34,21 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
             if (value != field) {
                 when (value) {
                     UiState.Loading -> {
+                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = true
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = false
                         swipe_container.isVisible = false
                     }
                     UiState.Empty -> {
+                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = false
                         empty_indicator.isVisible = true
                         error_indicator.isVisible = false
                         swipe_container.isVisible = false
                     }
                     UiState.Error -> {
+                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = false
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = true
@@ -53,11 +58,14 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
                         }
                     }
                     UiState.Content -> {
+                        swipe_container.isRefreshing = false
                         loading_indicator.isVisible = false
                         empty_indicator.isVisible = false
                         error_indicator.isVisible = false
                         swipe_container.isVisible = true
                         forecasts_list.adapter?.notifyDataSetChanged()
+                    }
+                    UiState.LoadingPast -> {
                     }
                 }
                 field = value
@@ -73,9 +81,7 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         super.onViewCreated(view, savedInstanceState)
 
         swipe_container.setOnRefreshListener {
-            Handler().postDelayed({
-                swipe_container.isRefreshing = false
-            }, 3000L)
+            fetchPastForecasts()
         }
 
         forecasts_list.apply {
@@ -95,9 +101,9 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
     private fun fetchFutureForecasts() {
         uiState = UiState.Loading
         lifecycleScope.launchWhenResumed {
-            appConfig.futureForecastRepository.getWeatherForecastFlow(
+            getForecastDaysFlow(
                 query = forecastLocation,
-                scope = this
+                repository = appConfig.futureForecastRepository
             ).collect { result ->
                 when (result) {
                     is RequestResult.Success<FutureWeatherForecast> -> {
@@ -111,11 +117,44 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         }
     }
 
+    @OptIn(FlowPreview::class)
+    private fun fetchPastForecasts() {
+        uiState = UiState.LoadingPast
+        lifecycleScope.launchWhenResumed {
+            getForecastDaysFlow(
+                query = forecastLocation,
+                repository = appConfig.pastForecastRepository
+            ).collect { result ->
+                when (result) {
+                    is RequestResult.Success<PastWeatherForecast> -> {
+                        forecastViewModel.setForecasts(
+                            listOfNotNull(
+                                result.data.forecast.dayForecasts,
+                                forecastViewModel.forecasts.value
+                            ).flatten()
+                        )
+                        disableSwipeToRefresh()
+                    }
+                    is RequestResult.Error -> {
+                        uiState = UiState.Error
+                    }
+                }
+            }
+        }
+    }
+
+    private fun disableSwipeToRefresh() {
+        swipe_container.setOnRefreshListener {
+            swipe_container.isRefreshing = false
+        }
+    }
+
     private enum class UiState {
         Loading,
         Error,
         Empty,
-        Content
+        Content,
+        LoadingPast
     }
 
     companion object {

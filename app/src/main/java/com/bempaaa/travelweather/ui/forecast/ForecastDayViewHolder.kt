@@ -21,7 +21,7 @@ class ForecastDayViewHolder(
     forecastDayView: View
 ) : RecyclerView.ViewHolder(forecastDayView) {
 
-    var boundViewModel: ForecastDayViewModel? = null
+    private var boundViewModel: ForecastDayViewModel? = null
 
     fun bind(viewModel: ForecastDayViewModel) {
         boundViewModel = viewModel
@@ -73,7 +73,7 @@ class ForecastDayViewHolder(
             }
         }
     }
-}
 
-internal fun ForecastDayViewHolder.isSameForecast(viewModel: ForecastDayViewModel): Boolean =
-    viewModel.forecast == boundViewModel?.forecast
+    fun isSame(viewModel: ForecastDayViewModel): Boolean =
+        viewModel.forecast == boundViewModel?.forecast
+}

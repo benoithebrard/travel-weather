@@ -13,6 +13,8 @@ data class DayWeather(
     @SerialName("totalprecip_mm") val precipitation: Double,
     @SerialName("avghumidity") val humidity: Double,
     @SerialName("uv") val uv: Double,
-    @SerialName("daily_chance_of_rain") val rain: Int,
-    @SerialName("daily_chance_of_snow") val snow: Int
+    @SerialName("daily_chance_of_rain") val rain: Int? = 0,
+    @SerialName("daily_chance_of_snow") val snow: Int? = 0,
+    @SerialName("chance_of_rain") val altRain: Int? = 0,
+    @SerialName("chance_of_snow") val altSnow: Int? = 0
 )

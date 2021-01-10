@@ -9,6 +9,7 @@ import com.bempaaa.travelweather.data.model.DayForecast
 class ForecastPageViewModel : ViewModel() {
 
     private val _forecasts = MutableLiveData<List<DayForecast>>()
+    val forecasts: LiveData<List<DayForecast>> = _forecasts
 
     val dayForecastViewModels: LiveData<List<ForecastDayViewModel>> =
         Transformations.map(_forecasts) { forecasts ->

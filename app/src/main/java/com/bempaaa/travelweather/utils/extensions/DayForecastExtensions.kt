@@ -4,7 +4,7 @@ import com.bempaaa.travelweather.data.model.DayForecast
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val simpleDateFormat = SimpleDateFormat("EEE MMM d", Locale.US)
+private val simpleDateFormat = SimpleDateFormat("EEE d MMM", Locale.US)
 
 val DayForecast.dateString: String
     get() = simpleDateFormat.format(date * 1000L)

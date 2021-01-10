@@ -11,7 +11,7 @@ class FutureWeatherForecastRepository(
     private val service: WeatherForecastService
 ) : CachedRepository<FutureWeatherForecast>() {
 
-    fun getWeatherForecastFlow(
+    fun getForecastDaysFlow(
         query: String,
         scope: CoroutineScope
     ): Flow<RequestResult<FutureWeatherForecast>> = scope.createFlowOf(
@@ -21,3 +21,11 @@ class FutureWeatherForecastRepository(
         service.futureWeather(query)
     }
 }
+
+fun CoroutineScope.getForecastDaysFlow(
+    query: String,
+    repository: FutureWeatherForecastRepository
+): Flow<RequestResult<FutureWeatherForecast>> = repository.getForecastDaysFlow(
+    query = query,
+    scope = this
+)

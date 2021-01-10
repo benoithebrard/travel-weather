@@ -19,18 +19,13 @@ class ForecastDaysAdapter(
     )
 
     override fun onBindViewHolder(
-        holder: ForecastDayViewHolder,
+        viewHolder: ForecastDayViewHolder,
         position: Int
     ) {
         forecasts.value?.let { viewModels ->
             val viewModel = viewModels[position]
-            if (!holder.isSameForecast(viewModel)) {
-                holder.bind(
-                    viewModel.copy(
-                        forecast = viewModel.forecast,
-                        isExpanded = holder.boundViewModel?.isExpanded ?: false
-                    )
-                )
+            if (!viewHolder.isSame(viewModel)) {
+                viewHolder.bind(viewModel)
             }
         }
     }
