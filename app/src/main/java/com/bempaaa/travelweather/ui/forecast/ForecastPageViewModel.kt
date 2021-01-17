@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bempaaa.travelweather.data.model.DayForecast
+import com.bempaaa.travelweather.ui.forecast.day.ForecastDayViewModel
 import com.bempaaa.travelweather.utils.extensions.combineWith
 
 class ForecastPageViewModel : ViewModel() {

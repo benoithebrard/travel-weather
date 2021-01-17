@@ -12,6 +12,7 @@ import com.bempaaa.travelweather.config.AppConfig
 import com.bempaaa.travelweather.data.model.FutureWeatherForecast
 import com.bempaaa.travelweather.data.model.PastWeatherForecast
 import com.bempaaa.travelweather.data.repository.getForecastDaysFlow
+import com.bempaaa.travelweather.ui.forecast.day.ForecastDaysAdapter
 import com.bempaaa.travelweather.utils.RequestResult
 import com.bempaaa.travelweather.utils.extensions.requireAppConfig
 import kotlinx.android.synthetic.main.fragment_forecast_page.*

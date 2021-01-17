@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/white_50"
+    android:background="@color/teal_50"
     tools:context=".ui.forecast.ForecastPageFragment">
 
     <ProgressBar

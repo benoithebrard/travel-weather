@@ -1,4 +1,4 @@
-package com.bempaaa.travelweather.ui.forecast
+package com.bempaaa.travelweather.ui.forecast.day
 
 import com.bempaaa.travelweather.data.model.DayForecast
 

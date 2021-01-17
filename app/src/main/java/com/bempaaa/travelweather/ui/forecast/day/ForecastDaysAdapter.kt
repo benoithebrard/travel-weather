@@ -1,4 +1,4 @@
-package com.bempaaa.travelweather.ui.forecast
+package com.bempaaa.travelweather.ui.forecast.day
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bempaaa.travelweather.R
 
 class ForecastDaysAdapter(
-    private val forecasts: LiveData<List<ForecastDayViewModel>>
+    private val forecastDays: LiveData<List<ForecastDayViewModel>>
 ) : RecyclerView.Adapter<ForecastDayViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -22,11 +22,11 @@ class ForecastDaysAdapter(
         viewHolder: ForecastDayViewHolder,
         position: Int
     ) {
-        forecasts.value?.let { viewModels ->
+        forecastDays.value?.let { viewModels ->
             val viewModel = viewModels[position]
             viewHolder.bind(viewModel)
         }
     }
 
-    override fun getItemCount(): Int = forecasts.value?.size ?: 0
+    override fun getItemCount(): Int = forecastDays.value?.size ?: 0
 }
