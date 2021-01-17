@@ -3,6 +3,7 @@ package com.bempaaa.travelweather.data.repository
 import com.bempaaa.travelweather.data.model.PastWeatherForecast
 import com.bempaaa.travelweather.data.service.WeatherForecastService
 import com.bempaaa.travelweather.utils.RequestResult
+import com.bempaaa.travelweather.utils.getPastDate
 import com.bempaaa.travelweather.utils.memory.MemoryCacheUseCases.Companion.THIRTY_SEC
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -12,36 +13,30 @@ class PastWeatherForecastRepository(
     private val service: WeatherForecastService
 ) : CachedRepository<PastWeatherForecast>() {
 
-    fun getForecastDayFlow(
-        query: String,
-        date: String,
-        scope: CoroutineScope
-    ): Flow<RequestResult<PastWeatherForecast>> = scope.createFlowOf(
-        key = query,
-        pollingInterval = THIRTY_SEC
-    ) {
-        service.pastWeather(query, date)
-    }
-
     fun getForecastDaysFlow(
         query: String,
         scope: CoroutineScope
     ): Flow<RequestResult<PastWeatherForecast>> {
+
+        val day1Date = getPastDate(3)
+        val day2Date = getPastDate(2)
+        val day3Date = getPastDate(1)
+
         val flowDay1 = getForecastDayFlow(
             query = query,
-            date = DAY_1,
+            date = day1Date,
             scope = scope
         )
 
         val flowDay2 = getForecastDayFlow(
             query = query,
-            date = DAY_2,
+            date = day2Date,
             scope = scope
         )
 
         val flowDay3 = getForecastDayFlow(
             query = query,
-            date = DAY_3,
+            date = day3Date,
             scope = scope
         )
 
@@ -53,6 +48,17 @@ class PastWeatherForecastRepository(
         return flow1And2.zip(flowDay3) { day1And2, day3 ->
             zipDayFlows(day1And2, day3)
         }
+    }
+
+    private fun getForecastDayFlow(
+        query: String,
+        date: String,
+        scope: CoroutineScope
+    ): Flow<RequestResult<PastWeatherForecast>> = scope.createFlowOf(
+        key = query,
+        pollingInterval = THIRTY_SEC
+    ) {
+        service.pastWeather(query, date)
     }
 
     private fun zipDayFlows(
@@ -70,12 +76,6 @@ class PastWeatherForecastRepository(
             )
         } else day2
     } else day1
-
-    companion object {
-        private const val DAY_1 = "2021-01-07"
-        private const val DAY_2 = "2021-01-08"
-        private const val DAY_3 = "2021-01-09"
-    }
 }
 
 fun CoroutineScope.getForecastDaysFlow(

@@ -32,33 +32,7 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
     private var uiState: UiState = UiState.Loading
         set(value) {
             if (value != field) {
-                when (value) {
-                    UiState.Loading -> {
-                        loading_indicator.isVisible = true
-                        empty_indicator.isVisible = false
-                        error_indicator.isVisible = false
-                        swipe_container.isVisible = false
-                    }
-                    UiState.Empty -> {
-                        loading_indicator.isVisible = false
-                        empty_indicator.isVisible = true
-                        error_indicator.isVisible = false
-                        swipe_container.isVisible = false
-                    }
-                    UiState.Error -> {
-                        loading_indicator.isVisible = false
-                        empty_indicator.isVisible = false
-                        error_indicator.isVisible = true
-                        swipe_container.isVisible = false
-                    }
-                    UiState.Content -> {
-                        swipe_container.isRefreshing = false
-                        loading_indicator.isVisible = false
-                        empty_indicator.isVisible = false
-                        error_indicator.isVisible = false
-                        swipe_container.isVisible = true
-                    }
-                }
+                updateUI(value)
                 field = value
             }
         }
@@ -162,6 +136,36 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         Error,
         Empty,
         Content
+    }
+
+    private fun updateUI(value: UiState) {
+        when (value) {
+            UiState.Loading -> {
+                loading_indicator.isVisible = true
+                empty_indicator.isVisible = false
+                error_indicator.isVisible = false
+                swipe_container.isVisible = false
+            }
+            UiState.Empty -> {
+                loading_indicator.isVisible = false
+                empty_indicator.isVisible = true
+                error_indicator.isVisible = false
+                swipe_container.isVisible = false
+            }
+            UiState.Error -> {
+                loading_indicator.isVisible = false
+                empty_indicator.isVisible = false
+                error_indicator.isVisible = true
+                swipe_container.isVisible = false
+            }
+            UiState.Content -> {
+                swipe_container.isRefreshing = false
+                loading_indicator.isVisible = false
+                empty_indicator.isVisible = false
+                error_indicator.isVisible = false
+                swipe_container.isVisible = true
+            }
+        }
     }
 
     companion object {
