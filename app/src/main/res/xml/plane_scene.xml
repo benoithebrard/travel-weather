@@ -19,6 +19,28 @@
                 motion:keyPositionType="parentRelative"
                 motion:motionTarget="@+id/plane_button"
                 motion:percentY="0.35" />
+
+            <KeyAttribute
+                android:alpha=".4"
+                android:rotation="90"
+                android:scaleX="2"
+                android:scaleY="2"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/plane_button">
+                <CustomAttribute
+                    motion:attributeName="ColorFilter"
+                    motion:customColorValue="#000000" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                android:rotation="45"
+                motion:framePosition="25"
+                motion:motionTarget="@+id/plane_button" />
+
+            <KeyAttribute
+                android:rotation="135"
+                motion:framePosition="75"
+                motion:motionTarget="@+id/plane_button" />
         </KeyFrameSet>
     </Transition>
 
@@ -28,7 +50,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
-            android:rotation="45"
+            android:rotation="70"
             android:src="@drawable/airplane"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
@@ -45,17 +67,14 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
-            android:alpha=".35"
-            android:rotation="135"
-            android:scaleX="2"
-            android:scaleY="2"
+            android:rotation="110"
             android:src="@drawable/airplane"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent">
             <CustomAttribute
                 motion:attributeName="ColorFilter"
-                motion:customColorValue="#000000" />
+                motion:customColorValue="#FFFFFF" />
         </Constraint>
     </ConstraintSet>
 
