@@ -1,15 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:motion="http://schemas.android.com/apk/res-auto">
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@layout/motion_plane_end"
-        motion:constraintSetStart="@layout/motion_plane_start"
-        motion:duration="1000">
+        motion:constraintSetEnd="@+id/plane_end"
+        motion:constraintSetStart="@+id/plane_start"
+        motion:duration="400"
+        motion:motionInterpolator="easeInOut">
 
         <OnSwipe
             motion:dragDirection="dragRight"
             motion:touchAnchorId="@+id/plane_button"
             motion:touchAnchorSide="right" />
 
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@+id/plane_button"
+                motion:percentY="0.35" />
+        </KeyFrameSet>
     </Transition>
+
+    <ConstraintSet android:id="@+id/plane_start">
+        <Constraint
+            android:id="@+id/plane_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            android:rotation="45"
+            android:src="@drawable/airplane"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent">
+            <CustomAttribute
+                motion:attributeName="ColorFilter"
+                motion:customColorValue="#FFFFFF" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/plane_end">
+        <Constraint
+            android:id="@+id/plane_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            android:alpha=".35"
+            android:rotation="135"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:src="@drawable/airplane"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent">
+            <CustomAttribute
+                motion:attributeName="ColorFilter"
+                motion:customColorValue="#000000" />
+        </Constraint>
+    </ConstraintSet>
+
 </MotionScene>
