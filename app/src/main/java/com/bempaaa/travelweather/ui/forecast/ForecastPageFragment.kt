@@ -40,7 +40,10 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        forecastViewModel = ViewModelProvider(this).get(ForecastPageViewModel::class.java)
+        forecastViewModel = ViewModelProvider(this).get(
+            forecastLocation,
+            ForecastPageViewModel::class.java
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

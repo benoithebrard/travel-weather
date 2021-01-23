@@ -1,28 +1,34 @@
 package com.bempaaa.travelweather
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
-import com.bempaaa.travelweather.ui.main.SectionsPagerAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.FragmentActivity
+import com.bempaaa.travelweather.ui.destination.DestinationPickerFragment
+import com.bempaaa.travelweather.ui.main.MainPagerFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity(R.layout.activity_main), NavigationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.root_container, MainPagerFragment())
+            .commit()
+    }
+
+    override fun onFabClicked() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.root_container, DestinationPickerFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onBackClicked() = onBackPressed()
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
         }
     }
 }
