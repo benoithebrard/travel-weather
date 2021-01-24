@@ -4,7 +4,7 @@ import android.view.View
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
-import com.bempaaa.travelweather.utils.helper.Dimensions
+import com.bempaaa.travelweather.utils.dimension.DimensionHolder
 
 /**
  * This function briefly expands the view in order to get its dimensions
@@ -15,8 +15,8 @@ import com.bempaaa.travelweather.utils.helper.Dimensions
 inline fun computeExpandedDimensions(
     parentView: View,
     expandableView: View,
-    cachedDimensions: Dimensions? = null,
-    crossinline onMeasured: (Dimensions) -> Unit
+    cachedDimensions: DimensionHolder? = null,
+    crossinline onMeasured: (DimensionHolder) -> Unit
 ) {
     if (cachedDimensions != null) {
         onMeasured(cachedDimensions)
@@ -25,25 +25,18 @@ inline fun computeExpandedDimensions(
 
     parentView.doOnLayout { view ->
         val originalHeight = view.height
-        val originalWidth = view.width
 
         expandableView.visibility = View.INVISIBLE
 
         parentView.doOnNextLayout { expandedView ->
             val expandedHeight = expandedView.height
-            val expandedWidth = expandedView.width
-
             parentView.post { expandableView.isVisible = false }
 
-            if (originalHeight > 0 && expandedHeight > 0 &&
-                originalWidth > 0 && expandedWidth > 0
-            ) {
+            if (originalHeight > 0 && expandedHeight > 0) {
                 onMeasured(
-                    Dimensions(
+                    DimensionHolder(
                         originalHeight,
-                        originalWidth,
-                        expandedHeight,
-                        expandedWidth
+                        expandedHeight
                     )
                 )
             }

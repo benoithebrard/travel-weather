@@ -2,9 +2,7 @@ package com.bempaaa.travelweather.utils
 
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.bempaaa.travelweather.utils.helper.Dimensions
 
 inline fun createValueAnimator(
     isForward: Boolean = true,
@@ -22,17 +20,3 @@ inline fun createValueAnimator(
         duration = animationDuration
         interpolator = animationInterpolator
     }
-
-fun adjustViewHeight(
-    parentView: View,
-    dimensions: Dimensions,
-    progress: Float
-) {
-    val originalHeight = dimensions.originalHeight
-    val expandedHeight = dimensions.expandedHeight
-    val newHeight =
-        (originalHeight + (expandedHeight - originalHeight) * progress).toInt()
-
-    parentView.layoutParams.height = newHeight
-    parentView.requestLayout()
-}

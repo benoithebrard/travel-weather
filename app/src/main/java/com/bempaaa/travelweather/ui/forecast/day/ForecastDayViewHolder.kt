@@ -9,15 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bempaaa.travelweather.ui.forecast.hour.ForecastHoursAdapter
 import com.bempaaa.travelweather.ui.forecast.hour.toForecastHourViewModels
-import com.bempaaa.travelweather.utils.adjustViewHeight
 import com.bempaaa.travelweather.utils.computeExpandedDimensions
 import com.bempaaa.travelweather.utils.createValueAnimator
-import com.bempaaa.travelweather.utils.extensions.dateString
-import com.bempaaa.travelweather.utils.extensions.fullIconUrl
-import com.bempaaa.travelweather.utils.extensions.maxTempRounded
-import com.bempaaa.travelweather.utils.extensions.minTempRounded
-import com.bempaaa.travelweather.utils.helper.Dimensions
-import com.bempaaa.travelweather.utils.helper.DimensionsHelper.forecastDimensions
+import com.bempaaa.travelweather.utils.extensions.*
+import com.bempaaa.travelweather.utils.dimension.DimensionHolder
+import com.bempaaa.travelweather.utils.dimension.DimensionHelper.forecastDimension
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_forecast_expanded.view.*
 import kotlinx.android.synthetic.main.item_forecast_main.view.*
@@ -32,9 +28,9 @@ class ForecastDayViewHolder(
         computeExpandedDimensions(
             parentView = itemView,
             expandableView = itemView.expandable_day_forecast_info,
-            cachedDimensions = forecastDimensions
+            cachedDimensions = forecastDimension
         ) { dimensions ->
-            forecastDimensions = dimensions
+            forecastDimension = dimensions
             setupClickListener(viewModel, dimensions)
         }
     }
@@ -64,7 +60,7 @@ class ForecastDayViewHolder(
 
     private fun setupClickListener(
         viewModel: ForecastDayViewModel,
-        dimensions: Dimensions
+        dimensions: DimensionHolder
     ) {
         itemView.setOnClickListener {
             val shouldExpand = !viewModel.isExpanded
@@ -77,9 +73,8 @@ class ForecastDayViewHolder(
             createValueAnimator(
                 isForward = shouldExpand
             ) { progress ->
-                adjustViewHeight(
-                    parentView = itemView,
-                    dimensions = dimensions,
+                itemView.adjustHeight(
+                    dimension = dimensions,
                     progress = progress
                 )
             }.apply {
