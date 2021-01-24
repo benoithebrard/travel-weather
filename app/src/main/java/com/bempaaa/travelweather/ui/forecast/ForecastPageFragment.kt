@@ -52,7 +52,7 @@ class ForecastPageFragment : Fragment(R.layout.fragment_forecast_page) {
         setupViewListeners()
         setupRecyclerView()
 
-        forecastViewModel.dayForecastViewModels.observe(this) { viewModels ->
+        forecastViewModel.dayForecastViewModels.observe(viewLifecycleOwner) { viewModels ->
             uiState = if (viewModels.isNotEmpty()) {
                 UiState.Content
             } else UiState.Empty
