@@ -5,7 +5,6 @@ import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
-import androidx.core.view.marginLeft
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bempaaa.travelweather.ui.forecast.hour.ForecastHoursAdapter
@@ -18,21 +17,13 @@ import com.bempaaa.travelweather.utils.extensions.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_forecast_expanded.view.*
 import kotlinx.android.synthetic.main.item_forecast_main.view.*
-import kotlinx.android.synthetic.main.list_item_forecast_day.view.*
 
 class ForecastDayViewHolder(
     forecastDayView: View
 ) : RecyclerView.ViewHolder(forecastDayView) {
 
     fun bind(viewModel: ForecastDayViewModel) {
-        setupCollapsedView(viewModel)
-
-        val containerMargin = itemView.forecast_container.marginLeft
-
-        val marginDimension = DimensionHolder(
-            originalValue = containerMargin,
-            expandedValue = containerMargin / 2
-        )
+        initView(viewModel)
 
         computeExpandedDimensions(
             parentView = itemView,
@@ -40,11 +31,11 @@ class ForecastDayViewHolder(
             cachedDimensions = forecastDimension
         ) { expandedDimension ->
             forecastDimension = expandedDimension
-            setupClickListener(viewModel, expandedDimension, marginDimension)
+            setupClickListener(viewModel, expandedDimension)
         }
     }
 
-    private fun setupCollapsedView(viewModel: ForecastDayViewModel) {
+    private fun initView(viewModel: ForecastDayViewModel) {
         with(viewModel.forecast) {
             itemView.apply {
                 date_text.text = dateString
@@ -69,8 +60,7 @@ class ForecastDayViewHolder(
 
     private fun setupClickListener(
         viewModel: ForecastDayViewModel,
-        forecastDimension: DimensionHolder,
-        marginDimension: DimensionHolder
+        forecastDimension: DimensionHolder
     ) {
         itemView.setOnClickListener {
             val shouldExpand = !viewModel.isExpanded
@@ -85,10 +75,6 @@ class ForecastDayViewHolder(
             ) { progress ->
                 itemView.adjustHeight(
                     forecastDimension,
-                    progress
-                )
-                itemView.adjustHorizontalMargin(
-                    marginDimension,
                     progress
                 )
             }.apply {
